@@ -29,7 +29,7 @@ class FilterListener(StreamListener):
 
     def __init__(self, cfg):
         op = cfg['output']
-        self.tweetwriter = open(op['tweets_file'], "w")
+        self.tweetfile = op['tweets_file']
         self.loctracker = LocTracker(op['location_file'])
         self.errfile = op['message_log']
         
@@ -51,8 +51,7 @@ class FilterListener(StreamListener):
         is_hit ='text' in d and any([pat.search(d['text']) for pat in self.patterns])
         
         if is_hit:
-          self.outwriter.write(data)
-          self.outwriter.write("\n")
+          open(self.tweetfile, 'a').write(data)
         
         loc = None
         if d['place']:
